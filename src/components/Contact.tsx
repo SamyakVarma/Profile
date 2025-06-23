@@ -46,9 +46,10 @@ const Contact = () => {
               {/* Contact Form */}
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border dark:border-gray-700">
                 <form 
-                action="https://formspree.io/f/myzjndlw" // replace with your ID
-                method="POST"
-                className="space-y-6">
+                  action="https://formspree.io/f/myzjndlw" // replace with your Formspree ID
+                  method="POST"
+                  className="space-y-6"
+                >
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Your Name
@@ -56,6 +57,8 @@ const Contact = () => {
                     <input
                       type="text"
                       id="name"
+                      name="name"
+                      required
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
                       placeholder="Enter your name"
                     />
@@ -68,6 +71,8 @@ const Contact = () => {
                     <input
                       type="email"
                       id="email"
+                      name="email"
+                      required
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
                       placeholder="Enter your email"
                     />
@@ -79,6 +84,8 @@ const Contact = () => {
                     </label>
                     <textarea
                       id="message"
+                      name="message"
+                      required
                       rows={4}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 resize-none"
                       placeholder="Tell me about your project or inquiry"
@@ -89,11 +96,11 @@ const Contact = () => {
                     type="submit"
                     className="w-full inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
                   >
-                    {/* <Send size={20} className="mr-2" /> */}
-                    <button type="submit" className='mr-2'>Send Message</button>
+                    Send Message
                   </button>
                 </form>
               </div>
+
             </div>
           </div>
         </div>
