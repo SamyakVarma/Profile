@@ -1,7 +1,43 @@
-import React from 'react';
-import { Mail, Send } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail } from 'lucide-react';
 
 const Contact = () => {
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('sending');
+
+    const form = e.currentTarget;
+    const formData = {
+      name: (form.elements.namedItem("name") as HTMLInputElement).value,
+      email: (form.elements.namedItem("email") as HTMLInputElement).value,
+      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+    };
+
+    try {
+      const res = await fetch("https://formspree.io/f/myzjndlw", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setStatus('success');
+        form.reset();
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus('error');
+    }
+
+    setTimeout(() => setStatus('idle'), 3000); // Reset status after 3 sec
+  };
+
   return (
     <section id="contact" className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,11 +81,7 @@ const Contact = () => {
 
               {/* Contact Form */}
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border dark:border-gray-700">
-                <form 
-                  action="https://formspree.io/f/myzjndlw" // replace with your Formspree ID
-                  method="POST"
-                  className="space-y-6"
-                >
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Your Name
@@ -94,9 +126,16 @@ const Contact = () => {
 
                   <button
                     type="submit"
-                    className="w-full inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
+                    className={`w-full inline-flex items-center justify-center px-6 py-3 text-white rounded-lg font-medium transition-all duration-200
+                      ${status === 'error' ? 'bg-red-600 animate-shake' :
+                        status === 'success' ? 'bg-green-600' : 'bg-blue-600 hover:bg-blue-700'}
+                    `}
+                    disabled={status === 'sending'}
                   >
-                    Send Message
+                    {status === 'sending' && "Sending..."}
+                    {status === 'success' && "Message Sent"}
+                    {status === 'error' && "Try Again"}
+                    {status === 'idle' && "Send Message"}
                   </button>
                 </form>
               </div>
